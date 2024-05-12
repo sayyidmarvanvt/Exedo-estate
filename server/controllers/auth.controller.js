@@ -8,7 +8,7 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   try {
-    const existingUser = await User.findOne({ email,username });
+    const existingUser = await User.findOne({ email});
     if (existingUser) {
       return next(errorHandler(400, "Already exists"));
     }
@@ -16,7 +16,7 @@ export const signup = async (req, res, next) => {
     await newUser.save(); //save into the model
     res.status(201).json("User created successfully");
   } catch (error) {
-    next(errorHandler(500,"Something wrong"));
+    next(error);
     // next(errorHandler(550,'error from functiom')) //created err
     // res.status(500).json(error.message)//sending duplicate error or errors to user
   }
