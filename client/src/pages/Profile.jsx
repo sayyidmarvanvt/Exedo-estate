@@ -11,6 +11,9 @@ import {
   updateUserFailure,
   updateUserSuccess,
   updateUserStart,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -21,13 +24,8 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0); //for percentage
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({}); //for changeddata
-  const [updateSuccess,setUpdateSuccess]=useState(false)
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
-
-  // allow read;
-  // allow write:if
-  // request.resource.size < 2 * 1024 * 1024 &&
-  // request.resource.contentType.matches("image/.*")
 
   useEffect(() => {
     if (file) {
@@ -80,12 +78,28 @@ export default function Profile() {
         return;
       }
       dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true)
+      setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl  font-semibold text-center my-7">Profile</h1>
@@ -141,16 +155,31 @@ export default function Profile() {
           id="password"
           className="border p-3 rounded-lg"
         />
-        <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+        >
           {loading ? "Loading..." : "UPDATE"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
-      <p className="text-red-700 mt-5">{error? error : ""}</p>
-      <p className="text-green-700 mt-5">{updateSuccess ? "User is updated successfully!" :""}</p>
+      <p className="text-red-700 mt-5">{error ? error : ""}</p>
+      <p className="text-green-700 mt-5">
+        {updateSuccess ? "User is updated successfully!" : ""}
+      </p>
     </div>
   );
 }
+
+// allow read;
+// allow write:if
+// request.resource.size < 2 * 1024 * 1024 &&
+// request.resource.contentType.matches("image/.*")

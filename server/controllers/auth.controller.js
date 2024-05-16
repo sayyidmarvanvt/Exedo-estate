@@ -6,15 +6,22 @@ import jwt from "jsonwebtoken";
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-
+  console.log("signup");
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return next(errorHandler(400, "Already exists"));
     }
     const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save(); //save into the model
-    res.status(201).json("User created successfully");
+    console.log(newUser);
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+    console.log("token", token);
+    const { password: pass, ...rest } = newUser._doc;
+    await newUser.save(); // Save user into the database
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(201)
+      .json(rest); // Send user data without password
   } catch (error) {
     next(error);
     // next(errorHandler(550,'error from functiom')) //created err
@@ -58,7 +65,7 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
-        username: req.body.name.split(" ").join("").toLowerCase(),
+        username: req.body.name.toLowerCase(),
         email: req.body.email,
         password: hashedPassword,
         avatar: req.body.photo,
@@ -69,7 +76,7 @@ export const google = async (req, res, next) => {
       res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
-        .json(...rest);
+        .json({ ...rest, avatar: req.body.photo })
     }
   } catch (error) {
     next(error);
