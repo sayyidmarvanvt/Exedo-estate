@@ -19,7 +19,7 @@ export const signup = async (req, res, next) => {
     const expiryDate = new Date(Date.now() + 36000000);
     await newUser.save(); // Save user into the database
     res
-      .cookie("access_token", token, { httpOnly: true,expires:expiryDate })
+      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(201)
       .json(rest); // Send user data without password
   } catch (error) {
@@ -89,5 +89,7 @@ export const signout = (req, res, next) => {
   try {
     res.clearCookie("access_token");
     res.status(200).json("User has been logged out!");
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
