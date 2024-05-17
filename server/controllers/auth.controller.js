@@ -15,11 +15,11 @@ export const signup = async (req, res, next) => {
     const newUser = new User({ username, email, password: hashedPassword });
     console.log(newUser);
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-    console.log("token", token);
     const { password: pass, ...rest } = newUser._doc;
+    const expiryDate = new Date(Date.now() + 36000000);
     await newUser.save(); // Save user into the database
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, { httpOnly: true,expires:expiryDate })
       .status(201)
       .json(rest); // Send user data without password
   } catch (error) {
@@ -39,8 +39,9 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
     //pass is used because above password called in const
+    const expiryDate = new Date(Date.now() + 36000000);
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
       .json(rest); //created cookie protected (httpOnly) and sending without password(rest)
   } catch (error) {
@@ -54,9 +55,9 @@ export const google = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
-      console.log(user._doc);
+      const expiryDate = new Date(Date.now() + 36000000);
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
         .json({ ...rest, avatar: req.body.photo });
     } else {
@@ -73,21 +74,20 @@ export const google = async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
+      const expiryDate = new Date(Date.now() + 3600000);
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
-        .json({ ...rest, avatar: req.body.photo })
+        .json({ ...rest, avatar: req.body.photo });
     }
   } catch (error) {
     next(error);
   }
 };
 
-export const signout=(req,res,next)=>{
+export const signout = (req, res, next) => {
   try {
-    res.clearCookie("access_token")
-    res.status(200).json("User has been logged out!")
-  } catch (error) {
-    
-  }
-}
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out!");
+  } catch (error) {}
+};
