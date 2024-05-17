@@ -88,35 +88,45 @@ export default function Profile() {
   };
 
   const handleDeleteUser = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        return;
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (isConfirmed) {
+      try {
+        dispatch(deleteUserStart());
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(deleteUserFailure(data.message));
+          return;
+        }
+        dispatch(deleteUserSuccess(data));
+      } catch (error) {
+        dispatch(deleteUserFailure(error.message));
       }
-      dispatch(deleteUserSuccess(data));
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
     }
   };
+
   const handleSignout = async () => {
-    try {
-      dispatch(signOutUserStart());
-      const res = await fetch("/api/auth/signout/");
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(signOutUserFailure(data.message));
-        return;
+    const isConfirmed = window.confirm("Are you sure you want to sign out?");
+    if (isConfirmed) {
+      try {
+        dispatch(signOutUserStart());
+        const res = await fetch("/api/auth/signout/");
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(signOutUserFailure(data.message));
+          return;
+        }
+        dispatch(signOutUserSuccess(data));
+      } catch (error) {
+        dispatch(signOutUserFailure(error.message));
       }
-      dispatch(signOutUserSuccess(data));
-    } catch (error) {
-      dispatch(signOutUserFailure(error.message));
     }
   };
+  
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl  font-semibold text-center my-7">Profile</h1>
