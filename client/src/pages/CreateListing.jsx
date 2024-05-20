@@ -4,7 +4,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +58,7 @@ export default function CreateListing() {
       setUploading(false);
     }
   };
+
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -89,6 +90,7 @@ export default function CreateListing() {
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
+
   const handleChange = (e) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({ ...formData, type: e.target.id });
@@ -116,7 +118,7 @@ export default function CreateListing() {
     e.preventDefault();
     try {
       if (formData.imageUrls.length < 1)
-        return setError("You must upload atleast 1 image");
+        return setError("You must upload at least 1 image");
       if (+formData.regularPrice < +formData.discountPrice)
         return setError("Discount price must be lower than regular price");
       setLoading(true);
@@ -132,16 +134,17 @@ export default function CreateListing() {
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
+      } else {
+        navigate(`/listing/${data._id}`);
       }
-      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
     }
   };
-  console.log(formData);
+
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">CreateListing</h1>
+      <h1 className="text-3xl font-semibold text-center my-7">Create Listing</h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
           <input
@@ -155,8 +158,7 @@ export default function CreateListing() {
             onChange={handleChange}
             value={formData.name}
           />
-          <input
-            type="textarea"
+          <textarea
             placeholder="Description"
             className="border p-3 rounded-lg"
             id="description"
@@ -248,7 +250,7 @@ export default function CreateListing() {
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
-                checked={formData.bathrooms}
+                value={formData.bathrooms}
               />
               <p>Baths</p>
             </div>
@@ -262,9 +264,8 @@ export default function CreateListing() {
                   required
                   className="p-3 border border-gray-300 rounded-lg"
                   onChange={handleChange}
-                  checked={formData.regularPrice}
+                  value={formData.regularPrice}
                 />
-
                 <div className="flex flex-col items-center">
                   <p>Regular price</p>
                   {formData.type === "rent" && (
@@ -276,13 +277,13 @@ export default function CreateListing() {
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
-                    id="discountedPrice"
+                    id="discountPrice"
                     min="0"
                     max="10000000"
                     required
                     className="p-3 border border-gray-300 rounded-lg"
                     onChange={handleChange}
-                    checked={formData.discountPrice}
+                    value={formData.discountPrice}
                   />
                   <div className="flex flex-col items-center">
                     <p>Discounted price</p>
