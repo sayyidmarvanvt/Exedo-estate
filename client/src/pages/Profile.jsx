@@ -22,7 +22,6 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import ListingsModal from "../components/ListingsModal";
 
-
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
@@ -61,7 +60,7 @@ export default function Profile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
           setFormData({ ...formData, avatar: downloadURL })
         );
-        setFileUploadError(false)
+        setFileUploadError(false);
       }
     );
   };
@@ -151,6 +150,7 @@ export default function Profile() {
     }
     setListingsVisible(!listingsVisible);
   };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl  font-semibold text-center my-7 uppercase">
@@ -236,7 +236,10 @@ export default function Profile() {
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
-      <button onClick={handleShowListings} className="text-green-700 w-full text-center">
+      <button
+        onClick={handleShowListings}
+        className="text-green-700 w-full text-center"
+      >
         {listingsVisible ? "Hide Listings" : "Show Listings"}
       </button>
       <p className="text-red-700 mt-5">
@@ -247,6 +250,7 @@ export default function Profile() {
         isVisible={listingsVisible}
         onClose={() => setListingsVisible(false)}
         listings={userListings}
+        setUserListings={setUserListings}
       />
     </div>
   );

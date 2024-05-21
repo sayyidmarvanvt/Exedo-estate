@@ -1,8 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ListingsModal = ({ isVisible, onClose, listings }) => {
+const ListingsModal = ({ isVisible, onClose, listings,setUserListings }) => {
   if (!isVisible) return null;
+
+
+  const handleListingDelete = async(listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
@@ -22,7 +42,7 @@ const ListingsModal = ({ isVisible, onClose, listings }) => {
                   </p>
                 </Link>
                 <div className="flex flex-col items-center">
-                  <button className="text-red-700 uppercase">Delete</button>
+                  <button onClick={()=>handleListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
                   <button className="text-green-700 uppercase">Edit</button>
                 </div>
               </div>
