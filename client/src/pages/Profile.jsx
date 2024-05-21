@@ -20,6 +20,8 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import ListingsModal from "../components/ListingsModal";
+
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -30,6 +32,9 @@ export default function Profile() {
   const [formData, setFormData] = useState({}); //for changeddata
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+  const [listingsVisible, setListingsVisible] = useState(false);
 
   useEffect(() => {
     if (file) {
@@ -56,6 +61,7 @@ export default function Profile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
           setFormData({ ...formData, avatar: downloadURL })
         );
+        setFileUploadError(false)
       }
     );
   };
@@ -128,9 +134,28 @@ export default function Profile() {
     }
   };
 
+  const handleShowListings = async () => {
+    setShowListingsError(false);
+    if (!listingsVisible) {
+      try {
+        const res = await fetch(`/api/user/listings/${currentUser._id}`);
+        const data = await res.json();
+        if (data.success == false) {
+          setShowListingsError(true);
+          return;
+        }
+        setUserListings(data);
+      } catch (error) {
+        setShowListingsError(true);
+      }
+    }
+    setListingsVisible(!listingsVisible);
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl  font-semibold text-center my-7">Profile</h1>
+      <h1 className="text-3xl  font-semibold text-center my-7 uppercase">
+        Profile
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
@@ -143,7 +168,7 @@ export default function Profile() {
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
           alt="profile"
-          className="rounded-full size-24 object-cover cursor-pointer self-center mt-2"
+          className="rounded-full size-24 object-contain cursor-pointer self-center mt-2"
         />
         <p className="self-center text-sm">
           {fileUploadError ? (
@@ -189,7 +214,12 @@ export default function Profile() {
         >
           {loading ? "Loading..." : "UPDATE"}
         </button>
-        <Link className="bg-green-700 p-3 rounded-lg uppercase text-white hover:opacity-95 text-center" to={"/create-listing"}>Create Listing</Link>
+        <Link
+          className="bg-green-700 p-3 rounded-lg uppercase text-white hover:opacity-95 text-center"
+          to={"/create-listing"}
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span
@@ -206,11 +236,18 @@ export default function Profile() {
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
+      <button onClick={handleShowListings} className="text-green-700 w-full text-center">
+        {listingsVisible ? "Hide Listings" : "Show Listings"}
+      </button>
+      <p className="text-red-700 mt-5">
+        {showListingsError ? "Error showing listings" : ""}
+      </p>
+
+      <ListingsModal
+        isVisible={listingsVisible}
+        onClose={() => setListingsVisible(false)}
+        listings={userListings}
+      />
     </div>
   );
 }
-
-// allow read;
-// allow write:if
-// request.resource.size < 2 * 1024 * 1024 &&
-// request.resource.contentType.matches("image/.*")
