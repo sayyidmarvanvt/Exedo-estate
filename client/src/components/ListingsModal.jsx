@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MdClose } from "react-icons/md";
 
 const ListingsModal = ({ isVisible, onClose, listings,setUserListings }) => {
   if (!isVisible) return null;
@@ -25,11 +26,11 @@ const ListingsModal = ({ isVisible, onClose, listings,setUserListings }) => {
 
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-5 rounded-lg max-w-sm w-full h-3/4 overflow-y-auto shadow-lg">
         <div className="flex justify-between items-center border-b pb-3">
           <h2 className="text-xl font-semibold">Your Listings</h2>
-          <button onClick={onClose} className="text-gray-700 hover:text-gray-900 ">&times;</button>
+          <button onClick={onClose} className="text-gray-700 hover:text-gray-900 "><MdClose /></button>
         </div>
         <div className="mt-4">
           {listings && listings.length > 0 ? (
@@ -43,7 +44,8 @@ const ListingsModal = ({ isVisible, onClose, listings,setUserListings }) => {
                 </Link>
                 <div className="flex flex-col items-center">
                   <button onClick={()=>handleListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <Link  to={`update-listing/${listing._id}`}><button className="text-green-700 uppercase">Edit</button></Link>
+                  
                 </div>
               </div>
             ))
