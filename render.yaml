@@ -6,14 +6,12 @@ services:
     startCommand: npm start
     envVars:
       - key: MONGO
-        value: mongodb+srv://sayyidmarvanvt:sayyidmarvanvt@real-estate.iyt5p2i.mongodb.net/?retryWrites=true&w=majority&appName=real-estate
+        value: mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
       - key: JWT_SECRET
         value: qwert
     autoDeploy: true
     plan: free
     region: oregon
-    build:
-      path: ./server
 
   - type: web
     name: realestate-client
@@ -26,5 +24,3 @@ services:
     autoDeploy: true
     plan: free
     region: oregon
-    build:
-      path: ./client
