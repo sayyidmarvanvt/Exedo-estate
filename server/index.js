@@ -1,91 +1,47 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-dotenv.config();
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
-import listingRouter from "./routes/listing.route.js"
+import listingRouter from "./routes/listing.route.js";
 import cookieParser from "cookie-parser";
-import path from "path"
+import path from "path";
+
+dotenv.config();
 
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
-    console.log("connected to mongodb");
+    console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err);
+    console.error("MongoDB connection error:", err);
   });
 
-
-const __dirname=path.resolve()
+const __dirname = path.resolve();
 const app = express();
-app.use(express.json()); //allow json as input of server
-app.use(cookieParser())
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+const PORT = process.env.PORT || 3000;
 
-// app.get('/test',(req,res)=>{res.send("hello world")})
+app.use(express.json());
+app.use(cookieParser());
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
-import userRouter from "./routes/user.route.js";
-import authRouter from "./routes/auth.route.js";
-import listingRouter from "./routes/listing.route.js"
-import cookieParser from "cookie-parser";
-import path from "path"
+// Serve static files from the client build directory
+app.use(express.static(path.join(__dirname, "..", "client")));
 
-mongoose
-  .connect(process.env.MONGO)
-  .then(() => {
-    console.log("connected to mongodb");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-
-const __dirname=path.resolve()
-const app = express();
-app.use(express.json()); //allow json as input of server
-app.use(cookieParser())
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+// Serve index.html for all other routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-// app.get('/test',(req,res)=>{res.send("hello world")})
-
-app.use("/api/user", userRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/listing", listingRouter);
-
-app.use(express.static(path.join(__dirname, '..', 'client')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
-});
-
-console.log(__dirname);
-//error middleware
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-  return res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
-});
-
-
-console.log(__dirname);
-//error middleware
+// Error middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
