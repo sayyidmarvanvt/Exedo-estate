@@ -2,11 +2,11 @@ services:
   - type: web
     name: realestate-server
     env: node
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd server && npm install && cd ../client && npm install && npm run build
+    startCommand: cd server && npm start
     envVars:
       - key: MONGO
-        value: mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
+        value: mongodb+srv://sayyidmarvanvt:sayyidmarvanvt@real-estate.iyt5p2i.mongodb.net/?retryWrites=true&w=majority&appName=real-estate
       - key: JWT_SECRET
         value: qwert
     autoDeploy: true
@@ -16,8 +16,8 @@ services:
   - type: web
     name: realestate-client
     env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm run preview
+    buildCommand: cd client && npm install && npm run build
+    startCommand: cd client && npm run preview
     envVars:
       - key: VITE_FIREBASE_API_KEY
         value: AIzaSyAh68ux4nFMjHFJdhdJXQrWEv2QCzjPPjw
