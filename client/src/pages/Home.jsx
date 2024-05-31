@@ -84,7 +84,7 @@ export default function Home() {
           ))}
       </Swiper>
 
-      <div className="max-w-6xl mx-autp p-3 flex flex-col gap-8 my-10">
+      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10 ">
         {offerListings && offerListings.length >0 && (
           <div>
             <div className="my-3">
