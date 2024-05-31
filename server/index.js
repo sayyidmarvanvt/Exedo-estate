@@ -34,12 +34,11 @@ app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
 // Serve static files from the client build directory
-app.use(express.static(path.join(__dirname, "..", "client")));
+app.use(express.static(path.join(__dirname, '/client/dist')));
 
-// Serve index.html for all other routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-});
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
 
 // Error middleware
 app.use((err, req, res, next) => {
