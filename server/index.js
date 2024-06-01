@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route.js";
 import listingRouter from "./routes/listing.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path"
 
 dotenv.config();
 const __dirname = path.resolve();
