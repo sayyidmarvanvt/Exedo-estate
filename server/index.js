@@ -8,6 +8,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 dotenv.config();
+const __dirname = path.resolve();
+const app = express();
+const PORT = 3000;
 
 const allowedOrigins = ["http://localhost:5173", "https://real-estate-usfd.onrender.com"];
 app.use(cors({
@@ -31,9 +34,6 @@ mongoose
     console.error("MongoDB connection error:", err);
   });
 
-const __dirname = path.resolve();
-const app = express();
-const PORT = 3000;
 
 app.use(express.json());
 app.use(cookieParser());
