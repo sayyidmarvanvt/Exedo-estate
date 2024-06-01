@@ -5,7 +5,7 @@ import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import listingRouter from "./routes/listing.route.js";
 import cookieParser from "cookie-parser";
-import cors from "cors";
+// import cors from "cors";
 import path from "path"
 
 dotenv.config();
@@ -14,15 +14,15 @@ const app = express();
 const PORT = 3000;
 
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://real-estate-usfd.onrender.com"
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "https://real-estate-usfd.onrender.com"
+// ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: allowedOrigins,
+//   credentials: true,
+// }));
 
 mongoose
   .connect(process.env.MONGO)
