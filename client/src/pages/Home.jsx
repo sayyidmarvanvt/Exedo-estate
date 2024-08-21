@@ -77,7 +77,7 @@ export default function Home() {
                 className="h-[500px]"
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                  backgroundSize: "contain",
+                  backgroundSize: "cover",
                 }}
               ></div>
             </SwiperSlide>
