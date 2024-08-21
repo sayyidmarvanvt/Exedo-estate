@@ -8,7 +8,7 @@ const ListingsModal = ({ isVisible, onClose, listings,setUserListings }) => {
 
   const handleListingDelete = async(listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/listing/delete/${listingId}`, {
         method: "DELETE",
       });
       const data = await res.json();

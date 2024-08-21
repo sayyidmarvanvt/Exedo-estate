@@ -26,7 +26,7 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       // setLoading(true);
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("https://real-estate-server-yqaq.onrender.com/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
