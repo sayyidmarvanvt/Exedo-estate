@@ -25,6 +25,12 @@ mongoose
 app.use(express.json());
 app.use(cookieParser());
 
+const corsOptions = {
+  origin: 'https://real-estate-mhee.onrender.com', 
+};
+
+app.use(cors(corsOptions));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
