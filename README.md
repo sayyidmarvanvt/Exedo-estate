@@ -23,11 +23,11 @@ Exedo Estate is a modern real estate marketplace built with the MERN stack (Mong
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/exedo-estate.git
+   git clone https://github.com/your-username/Exedo-estate.git
    ```
 2. **Navigate to the project directory:**
    ```bash
-   cd exedo-estate
+   cd Exedo-estate
    ```
 3. **Install the dependencies:**
    ```bash
