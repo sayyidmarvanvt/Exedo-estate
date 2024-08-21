@@ -53,4 +53,4 @@ Exedo Estate is a modern real estate marketplace built with the MERN stack (Mong
 
 ## 📦 Deployment
 
-- This project is deployed on Render. You can access the live version [here]().
+- This project is deployed on Render. You can access the live version [here](https://real-estate-mhee.onrender.com).
