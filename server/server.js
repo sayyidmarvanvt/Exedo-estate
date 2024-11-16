@@ -26,8 +26,20 @@ mongoose
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "https://real-estate-mhee.onrender.com", // Production frontend
+  "http://localhost:5173", // Local development frontend
+];
+
 const corsOptions = {
-  origin: 'https://real-estate-mhee.onrender.com', 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
