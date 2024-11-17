@@ -3,29 +3,37 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return next(errorHandler(400, "All fields are required"));
+  }
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  console.log("signup");
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return next(errorHandler(400, "Already exists"));
+      return next(errorHandler(400, "User already exists"));
     }
+
     const newUser = new User({ username, email, password: hashedPassword });
-    console.log(newUser);
+    await newUser.save();
+
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = newUser._doc;
-    const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiry
-    await newUser.save(); // Save user into the database
+
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expiryDate,
+      })
       .status(201)
-      .json(rest); // Send user data without password
+      .json(rest);
   } catch (error) {
-    next(error);
-    // next(errorHandler(550,'error from function')) //created err
-    // res.status(500).json(error.message)//sending duplicate error or errors to user
+    next(errorHandler(500, "Internal server error"));
   }
 };
 
@@ -38,12 +46,11 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, "Wrong credentials!"));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
-    // pass is used because above password called in const
-    const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiry
-    res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
-      .status(200)
-      .json(rest); // created cookie protected (httpOnly) and sending without password (rest)
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      expires: expiryDate,
+    });
   } catch (error) {
     next(error);
   }
@@ -55,7 +62,6 @@ export const google = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
-      const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiry
       res
         .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
@@ -74,7 +80,6 @@ export const google = async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
-      const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiry
       res
         .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
@@ -89,8 +94,6 @@ export const signout = (req, res, next) => {
   try {
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
       path: "/",
     });
     res.status(200).json("User has been logged out!");
