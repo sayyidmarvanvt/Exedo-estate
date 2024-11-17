@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
+import axios from "axios";
 
 export default function Search() {
   const [sidebardata, setSidebardata] = useState({
@@ -94,9 +95,8 @@ export default function Search() {
       setShowMore(false);
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(
-        `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`,
-        { credentials: "include" }
+      const res = await axios.get(
+        `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`
       );
       const data = await res.json();
       if (data.length > 8) {
@@ -116,7 +116,9 @@ export default function Search() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`);
+    const res = await fetch(
+      `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`
+    );
     const data = await res.json();
     if (data.length < 9) {
       setShowMore(false);

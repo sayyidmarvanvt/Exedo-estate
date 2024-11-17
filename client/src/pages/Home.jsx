@@ -6,6 +6,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
 import Spinner from "../components/spinner.component";
+import axios from "axios";
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
@@ -24,15 +25,23 @@ export default function Home() {
       try {
         setLoading({ offers: true, rent: true, sale: true });
         const [offers, rent, sale] = await Promise.all([
-          fetch(
-            "https://real-estate-server-yqaq.onrender.com/api/listing/search?offer=true&limit=4",
-          ).then((res) => res.json()),
-          fetch(
-            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4"
-          ).then((res) => res.json()),
-          fetch(
-            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4"
-          ).then((res) => res.json()),
+          axios
+            .get(
+              "https://real-estate-server-yqaq.onrender.com/api/listing/search?offer=true&limit=4"
+            )
+            .then((res) => res.data),
+
+          axios
+            .get(
+              "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4"
+            )
+            .then((res) => res.data),
+
+          axios
+            .get(
+              "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4"
+            )
+            .then((res) => res.data),
         ]);
         setOfferListings(offers);
         setRentListings(rent);
@@ -46,7 +55,6 @@ export default function Home() {
 
     fetchData();
   }, []);
-
 
   return (
     <div>

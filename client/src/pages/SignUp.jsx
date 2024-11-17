@@ -7,6 +7,7 @@ import {
   signUpSuccess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import axios from "axios";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -26,19 +27,17 @@ export default function SignUp() {
     e.preventDefault();
     try {
       dispatch(signUpStart());
-      const res = await fetch(
-        "https://real-estate-server-yqaq.onrender.com/api/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-          credentials: "include",
-        }
-      );
+   const res = await axios.post(
+     "https://real-estate-server-yqaq.onrender.com/api/auth/signup",
+     formData,
+     {
+       withCredentials: true,
+       headers: {
+         "Content-Type": "application/json",
+       },
+     }
+   );
       const data = await res.json();
-      console.log("data",data);
       if (data.success === false) {
         dispatch(signUpFailure(data.message));
         return;

@@ -15,9 +15,7 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import Contact from '../components/Contact';
-// import Contact from '../components/Contact';
-
-// https://sabe.io/blog/javascript-format-numbers-commas#:~:text=The%20best%20way%20to%20format,format%20the%20number%20with%20commas.
+import axios from 'axios';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -33,10 +31,9 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://real-estate-server-yqaq.onrender.com/api/listing/get/${params.listingId}`,
-          { credentials: "include" }
-        );
+       const res = await axios.get(
+         `https://real-estate-server-yqaq.onrender.com/api/listing/get/${params.listingId}`
+       );
         const data = await res.json();
         if (data.success === false) {
           setError(true);

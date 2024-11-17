@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -123,15 +124,17 @@ export default function CreateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch(
+      const res = await axios.post(
         "https://real-estate-server-yqaq.onrender.com/api/listing/create",
         {
-          method: "POST",
+          ...formData,
+          userRef: currentUser._id,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, userRef: currentUser._id }),
-          credentials: "include",
+          withCredentials: true,
         }
       );
       const data = await res.json();
@@ -148,7 +151,9 @@ export default function CreateListing() {
 
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">Create Listing</h1>
+      <h1 className="text-3xl font-semibold text-center my-7">
+        Create Listing
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
           <input

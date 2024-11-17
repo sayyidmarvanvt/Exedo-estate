@@ -22,10 +22,13 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ListingsModal from "../components/ListingsModal";
 import { clearPersistedState } from "../redux/store";
+import axios from "axios"; // Import axios
 
 export default function Profile() {
   const navigate = useNavigate();
   const { currentUser, loading, error } = useSelector((state) => state.user);
+  console.log(currentUser);
+
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined); //for image
   const [filePerc, setFilePerc] = useState(0); //for percentage
@@ -37,17 +40,16 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const [listingsVisible, setListingsVisible] = useState(false);
 
- useEffect(() => {
-   if (file) {
-     if (file.size > 2 * 1024 * 1024) {
-       // Limit file size to 2MB
-       setFileUploadError(true);
-       return;
-     }
-     handleFileUpload(file);
-   }
- }, [file]);
-
+  useEffect(() => {
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        // Limit file size to 2MB
+        setFileUploadError(true);
+        return;
+      }
+      handleFileUpload(file);
+    }
+  }, [file]);
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -62,8 +64,7 @@ export default function Profile() {
         setFilePerc(Math.round(progress));
       },
       (error) => {
-       setFileUploadError("Error uploading image. Make sure it's under 2 MB.");
-
+        setFileUploadError("Error uploading image. Make sure it's under 2 MB.");
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -82,19 +83,12 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(
+      const res = await axios.post(
         `https://real-estate-server-yqaq.onrender.com/api/user/update/${currentUser._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-          credentials: "include",
-        }
+        formData,
+        { withCredentials: true } // Include credentials (cookies)
       );
-      const data = await res.json();
-      console.log(data);
+      const data = res.data;
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
@@ -113,14 +107,11 @@ export default function Profile() {
     if (isConfirmed) {
       try {
         dispatch(deleteUserStart());
-        const res = await fetch(
+        const res = await axios.delete(
           `https://real-estate-server-yqaq.onrender.com/api/user/delete/${currentUser._id}`,
-          {
-            method: "DELETE",
-            credentials: "include",
-          }
+          { withCredentials: true } // Include credentials (cookies)
         );
-        const data = await res.json();
+        const data = res.data;
         if (data.success === false) {
           dispatch(deleteUserFailure(data.message));
           return;
@@ -138,13 +129,11 @@ export default function Profile() {
     if (isConfirmed) {
       try {
         dispatch(signOutUserStart());
-        const res = await fetch(
+        const res = await axios.post(
           "https://real-estate-server-yqaq.onrender.com/api/auth/signout/",
-          {
-            credentials: "include",
-          }
+          { withCredentials: true } // Include credentials (cookies)
         );
-        const data = await res.json();
+        const data = res.data;
         if (data.success === false) {
           dispatch(signOutUserFailure(data.message));
           return;
@@ -162,16 +151,12 @@ export default function Profile() {
     setShowListingsError(false);
     if (!listingsVisible) {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `https://real-estate-server-yqaq.onrender.com/api/user/listings/${currentUser._id}`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
+          { withCredentials: true } // Include credentials (cookies)
         );
-
-        const data = await res.json();
-        if (data.success == false) {
+        const data = res.data;
+        if (data.success === false) {
           setShowListingsError(true);
           return;
         }

@@ -7,6 +7,7 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import axios from "axios";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -25,22 +26,19 @@ export default function SignIn() {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await fetch(
+      const res = await axios.post(
         "https://real-estate-server-yqaq.onrender.com/api/auth/signin",
+        formData,
         {
-          method: "POST",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
-          credentials: "include",
         }
       );
       const data = await res.json();
-      console.log("signup",data);
       if (data.success === false) {
         dispatch(signInFailure(data.message));
-
         return;
       }
       dispatch(signInSuccess(data));
@@ -73,7 +71,7 @@ export default function SignIn() {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <OAuth/>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont have an account?</p>

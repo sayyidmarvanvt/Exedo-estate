@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Contact({ listing }) {
   const [landlord, setLandlord] = useState(null);
@@ -12,9 +13,9 @@ export default function Contact({ listing }) {
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await fetch(
-          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
-        );
+       const res = await axios.get(
+         `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
+       );
         const data = await res.json();
         setLandlord(data);
       } catch (error) {

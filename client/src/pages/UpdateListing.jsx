@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -36,16 +37,15 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(
-        `https://real-estate-server-yqaq.onrender.com/api/listing/get/${listingId}`,
-        { credentials: "include" }
+      const res = await axios.get(
+        `https://real-estate-server-yqaq.onrender.com/api/listing/get/${listingId}`
       );
-      const data=await res.json()
-      if(data.success === false){
+      const data = await res.json();
+      if (data.success === false) {
         console.log(data.message);
-        return
+        return;
       }
-      setFormData(data)
+      setFormData(data);
     };
     fetchListing();
   }, []);
@@ -141,15 +141,14 @@ export default function UpdateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch(
+      const res = await axios.post(
         `https://real-estate-server-yqaq.onrender.com/api/listing/update/${params.listingId}`,
+        { ...formData, userRef: currentUser._id },
         {
-          method: "POST",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, userRef: currentUser._id }),
-          credentials: "include",
         }
       );
       const data = await res.json();
