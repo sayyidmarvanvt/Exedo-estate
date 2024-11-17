@@ -29,6 +29,8 @@ export const signup = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         expires: expiryDate,
+        sameSite: "None",
+        secure: process.env.NODE_ENV === "production", 
       })
       .status(201)
       .json(rest);
@@ -47,10 +49,15 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      expires: expiryDate,
-    });
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expiryDate,
+        sameSite: "None", 
+        secure: process.env.NODE_ENV === "production",
+      })
+      .status(200)
+      .json(rest);
   } catch (error) {
     next(error);
   }
@@ -63,7 +70,12 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+          sameSite: "None",
+          secure: process.env.NODE_ENV === "production", 
+        })
         .status(200)
         .json({ ...rest, avatar: req.body.photo });
     } else {
@@ -81,7 +93,12 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+          sameSite: "None",
+          secure: process.env.NODE_ENV === "production", 
+        })
         .status(200)
         .json({ ...rest, avatar: req.body.photo });
     }
@@ -95,6 +112,8 @@ export const signout = (req, res, next) => {
     res.clearCookie("access_token", {
       httpOnly: true,
       path: "/",
+      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
     });
     res.status(200).json("User has been logged out!");
   } catch (error) {
