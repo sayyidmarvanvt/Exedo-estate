@@ -30,7 +30,7 @@ export const signup = async (req, res, next) => {
         httpOnly: true,
         expires: expiryDate,
         sameSite: "None",
-        secure: process.env.NODE_ENV === "production", 
+        secure: process.env.NODE_ENV === "production",
       })
       .status(201)
       .json(rest);
@@ -53,7 +53,7 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         expires: expiryDate,
-        sameSite: "None", 
+        sameSite: "None",
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
@@ -74,7 +74,7 @@ export const google = async (req, res, next) => {
           httpOnly: true,
           expires: expiryDate,
           sameSite: "None",
-          secure: process.env.NODE_ENV === "production", 
+          secure: process.env.NODE_ENV === "production",
         })
         .status(200)
         .json({ ...rest, avatar: req.body.photo });
@@ -97,7 +97,7 @@ export const google = async (req, res, next) => {
           httpOnly: true,
           expires: expiryDate,
           sameSite: "None",
-          secure: process.env.NODE_ENV === "production", 
+          secure: process.env.NODE_ENV === "production",
         })
         .status(200)
         .json({ ...rest, avatar: req.body.photo });
@@ -114,6 +114,7 @@ export const signout = (req, res, next) => {
       path: "/",
       sameSite: "None",
       secure: process.env.NODE_ENV === "production",
+      domain: "https://real-estate-mhee.onrender.com",
     });
     res.status(200).json("User has been logged out!");
   } catch (error) {

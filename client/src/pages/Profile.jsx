@@ -139,7 +139,6 @@ export default function Profile() {
           return;
         }
         dispatch(signOutUserSuccess(data));
-        clearPersistedState();
         navigate("/");
       } catch (error) {
         dispatch(signOutUserFailure(error.message));

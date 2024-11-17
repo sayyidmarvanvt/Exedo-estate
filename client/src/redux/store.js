@@ -23,6 +23,3 @@ export const store = configureStore({
 
 export const persistor=persistStore(store)
 
-export const clearPersistedState = () => {
-    persistor.purge();
-  };
