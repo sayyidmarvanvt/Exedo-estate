@@ -25,8 +25,9 @@ export default function OAuth() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
-      );
+      );    
       const data = res.data;
       dispatch(signInSuccess(data));
       dispatch(signUpSuccess(data));
