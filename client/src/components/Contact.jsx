@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 export default function Contact({ listing }) {
   const [landlord, setLandlord] = useState(null);
   const [message, setMesssage] = useState("");
+
   const onChange = (e) => {
     setMesssage(e.target.value);
   };
-
+  
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
         const res = await fetch(
-          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`,
-          { credentials: "include" }
+          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
         );
         const data = await res.json();
         setLandlord(data);
@@ -22,7 +22,7 @@ export default function Contact({ listing }) {
       }
     };
     fetchLandlord();
-  }, [listing.userRef]);
+  }, [listing]);
   console.log(landlord);
   return (
     <>

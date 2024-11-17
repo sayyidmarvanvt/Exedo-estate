@@ -37,7 +37,6 @@ export default function Listing() {
           `https://real-estate-server-yqaq.onrender.com/api/listing/get/${params.listingId}`,
           { credentials: "include" }
         );
-        console.log(data);
         const data = await res.json();
         if (data.success === false) {
           setError(true);

@@ -26,15 +26,12 @@ export default function Home() {
         const [offers, rent, sale] = await Promise.all([
           fetch(
             "https://real-estate-server-yqaq.onrender.com/api/listing/search?offer=true&limit=4",
-            { credentials: "include" }
           ).then((res) => res.json()),
           fetch(
-            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4",
-            { credentials: "include" }
+            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4"
           ).then((res) => res.json()),
           fetch(
-            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4",
-            { credentials: "include" }
+            "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4"
           ).then((res) => res.json()),
         ]);
         setOfferListings(offers);
