@@ -21,6 +21,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ListingsModal from "../components/ListingsModal";
+import { clearPersistedState } from "../redux/store";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function Profile() {
           return;
         }
         dispatch(deleteUserSuccess(data));
-        // navigate("/");
+        navigate("/");
       } catch (error) {
         dispatch(deleteUserFailure(error.message));
       }
@@ -137,8 +138,8 @@ export default function Profile() {
           return;
         }
         dispatch(signOutUserSuccess(data));
-         clearPersistedState();
-        // navigate("/");
+        clearPersistedState();
+        navigate("/");
       } catch (error) {
         dispatch(signOutUserFailure(error.message));
       }
