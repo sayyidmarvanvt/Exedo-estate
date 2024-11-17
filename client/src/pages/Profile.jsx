@@ -128,9 +128,8 @@ export default function Profile() {
     if (isConfirmed) {
       try {
         dispatch(signOutUserStart());
-        const res = await axios.post(
+        const res = await axios.get(
           "https://real-estate-server-yqaq.onrender.com/api/auth/signout/",
-          {},
           { withCredentials: true } // Include credentials (cookies)
         );
         const data = res.data;
