@@ -26,11 +26,12 @@ app.use(cookieParser());
 
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigins =
-      process.env.NODE_ENV === "production"
-        ? ["https://real-estate-mhee.onrender.com"]
-        : ["http://localhost:5173"];
+    const allowedOrigins = [
+      "http://localhost:5173", // Development URL
+      "https://real-estate-mhee.onrender.com", // Production URL
+    ];
 
+    // Check if the incoming origin is in the allowed origins
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
