@@ -109,12 +109,13 @@ export const google = async (req, res, next) => {
 
 export const signout = async (req, res, next) => {
   try {
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      expires: expiryDate,
-      sameSite: "None",
-      secure: process.env.NODE_ENV === "production",
-    });
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    path: "/",
+    sameSite: "None",
+    secure: process.env.NODE_ENV === "production",
+    expires: new Date(0),
+  });
     res.status(200).json("User has been logged out!");
   } catch (error) {
     next(error);
