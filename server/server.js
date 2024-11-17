@@ -25,8 +25,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "https://real-estate-mhee.onrender.com",
-  credentials: true,
+  origin: (origin, callback) => {
+    const allowedOrigins =
+      process.env.NODE_ENV === "production"
+        ? ["https://real-estate-mhee.onrender.com"]
+        : ["http://localhost:5173"];
+
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, 
 };
 
 app.use(cors(corsOptions));
