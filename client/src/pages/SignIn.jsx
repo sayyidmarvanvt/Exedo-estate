@@ -25,30 +25,28 @@ export default function SignIn() {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      // setLoading(true);
-      const res = await fetch("https://real-estate-server-yqaq.onrender.com/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        "https://real-estate-server-yqaq.onrender.com/api/auth/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       console.log("signup",data);
       if (data.success === false) {
         dispatch(signInFailure(data.message));
-        // setLoading(false);
-        // setError(data.message);
+
         return;
       }
       dispatch(signInSuccess(data));
-      // setLoading(false);
-      // setError(null);
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
-      // setLoading(false);
-      // setError(error.message);
     }
   };
   return (

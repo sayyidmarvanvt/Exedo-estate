@@ -37,11 +37,17 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const [listingsVisible, setListingsVisible] = useState(false);
 
-  useEffect(() => {
-    if (file) {
-      handleFileUpload(file);
-    }
-  }, [file]);
+ useEffect(() => {
+   if (file) {
+     if (file.size > 2 * 1024 * 1024) {
+       // Limit file size to 2MB
+       setFileUploadError(true);
+       return;
+     }
+     handleFileUpload(file);
+   }
+ }, [file]);
+
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -56,7 +62,8 @@ export default function Profile() {
         setFilePerc(Math.round(progress));
       },
       (error) => {
-        setFileUploadError(true);
+       setFileUploadError("Error uploading image. Make sure it's under 2 MB.");
+
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -83,6 +90,7 @@ export default function Profile() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
+          credentials: "include",
         }
       );
       const data = await res.json();
@@ -109,6 +117,7 @@ export default function Profile() {
           `https://real-estate-server-yqaq.onrender.com/api/user/delete/${currentUser._id}`,
           {
             method: "DELETE",
+            credentials: "include",
           }
         );
         const data = await res.json();
@@ -130,7 +139,10 @@ export default function Profile() {
       try {
         dispatch(signOutUserStart());
         const res = await fetch(
-          "https://real-estate-server-yqaq.onrender.com/api/auth/signout/"
+          "https://real-estate-server-yqaq.onrender.com/api/auth/signout/",
+          {
+            credentials: "include",
+          }
         );
         const data = await res.json();
         if (data.success === false) {

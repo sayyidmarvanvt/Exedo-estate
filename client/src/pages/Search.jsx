@@ -94,7 +94,10 @@ export default function Search() {
       setShowMore(false);
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`);
+      const res = await fetch(
+        `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`,
+        { credentials: "include" }
+      );
       const data = await res.json();
       if (data.length > 8) {
         setShowMore(true);

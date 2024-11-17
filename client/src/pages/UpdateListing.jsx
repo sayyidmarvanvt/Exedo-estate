@@ -36,7 +36,10 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res=await fetch(`https://real-estate-server-yqaq.onrender.com/api/listing/get/${listingId}`)
+      const res = await fetch(
+        `https://real-estate-server-yqaq.onrender.com/api/listing/get/${listingId}`,
+        { credentials: "include" }
+      );
       const data=await res.json()
       if(data.success === false){
         console.log(data.message);
@@ -138,13 +141,17 @@ export default function UpdateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch( `/api/listing/update/${params.listingId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...formData, userRef: currentUser._id }),
-      });
+      const res = await fetch(
+        `https://real-estate-server-yqaq.onrender.com/api/listing/update/${params.listingId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...formData, userRef: currentUser._id }),
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
