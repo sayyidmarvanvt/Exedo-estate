@@ -12,7 +12,7 @@ const ListingsModal = ({ isVisible, onClose, listings, setUserListings }) => {
         `https://real-estate-server-yqaq.onrender.com/api/listing/delete/${listingId}`,
         { withCredentials: true }
       );
-      const data = await res.json();
+      const data = res.data;
       if (data.success === false) {
         console.log(data.message);
         return;

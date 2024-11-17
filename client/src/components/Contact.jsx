@@ -9,14 +9,14 @@ export default function Contact({ listing }) {
   const onChange = (e) => {
     setMesssage(e.target.value);
   };
-  
+
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-       const res = await axios.get(
-         `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
-       );
-        const data = await res.json();
+        const res = await axios.get(
+          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
+        );
+        const data = res.data;
         setLandlord(data);
       } catch (error) {
         console.log(error);

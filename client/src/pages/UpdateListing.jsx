@@ -40,7 +40,7 @@ export default function UpdateListing() {
       const res = await axios.get(
         `https://real-estate-server-yqaq.onrender.com/api/listing/get/${listingId}`
       );
-      const data = await res.json();
+      const data = res.data;
       if (data.success === false) {
         console.log(data.message);
         return;
@@ -151,7 +151,7 @@ export default function UpdateListing() {
           },
         }
       );
-      const data = await res.json();
+      const data = res.data;
       setLoading(false);
       if (data.success === false) {
         setError(data.message);

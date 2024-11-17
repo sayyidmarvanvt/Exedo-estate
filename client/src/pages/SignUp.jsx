@@ -27,17 +27,17 @@ export default function SignUp() {
     e.preventDefault();
     try {
       dispatch(signUpStart());
-   const res = await axios.post(
-     "https://real-estate-server-yqaq.onrender.com/api/auth/signup",
-     formData,
-     {
-       withCredentials: true,
-       headers: {
-         "Content-Type": "application/json",
-       },
-     }
-   );
-      const data = await res.json();
+      const res = await axios.post(
+        "https://real-estate-server-yqaq.onrender.com/api/auth/signup",
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = res.data;
       if (data.success === false) {
         dispatch(signUpFailure(data.message));
         return;

@@ -137,7 +137,7 @@ export default function CreateListing() {
           withCredentials: true,
         }
       );
-      const data = await res.json();
+      const data = res.data;
       setLoading(false);
       if (data.success === false) {
         setError(data.message);

@@ -98,7 +98,7 @@ export default function Search() {
       const res = await axios.get(
         `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`
       );
-      const data = await res.json();
+      const data = res.data;
       if (data.length > 8) {
         setShowMore(true);
       } else {
@@ -119,7 +119,7 @@ export default function Search() {
     const res = await fetch(
       `https://real-estate-server-yqaq.onrender.com/api/listing/search?${searchQuery}`
     );
-    const data = await res.json();
+    const data = res.data;
     if (data.length < 9) {
       setShowMore(false);
     }

@@ -27,8 +27,7 @@ export default function OAuth() {
           },
         }
       );
-
-      const data = await res.json();
+      const data = res.data;
       dispatch(signInSuccess(data));
       dispatch(signUpSuccess(data));
       navigate("/");
