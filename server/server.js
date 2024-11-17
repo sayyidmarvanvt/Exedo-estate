@@ -26,23 +26,12 @@ mongoose
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "https://real-estate-mhee.onrender.com", // Production frontend
-  "http://localhost:5173", // Local development frontend
-];
+// const corsOptions = {
+//   origin: "https://real-estate-mhee.onrender.com",
+//   credentials: true,
+// };
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

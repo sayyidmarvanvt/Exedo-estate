@@ -19,10 +19,11 @@ import {
   signOutUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ListingsModal from "../components/ListingsModal";
 
 export default function Profile() {
+  const navigate = useNavigate();
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined); //for image
@@ -73,13 +74,16 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/user/update/${currentUser._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `https://real-estate-server-yqaq.onrender.com/api/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
@@ -100,15 +104,19 @@ export default function Profile() {
     if (isConfirmed) {
       try {
         dispatch(deleteUserStart());
-        const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/user/delete/${currentUser._id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `https://real-estate-server-yqaq.onrender.com/api/user/delete/${currentUser._id}`,
+          {
+            method: "DELETE",
+          }
+        );
         const data = await res.json();
         if (data.success === false) {
           dispatch(deleteUserFailure(data.message));
           return;
         }
         dispatch(deleteUserSuccess(data));
+        // navigate("/");
       } catch (error) {
         dispatch(deleteUserFailure(error.message));
       }
@@ -120,13 +128,17 @@ export default function Profile() {
     if (isConfirmed) {
       try {
         dispatch(signOutUserStart());
-        const res = await fetch("https://real-estate-server-yqaq.onrender.com/api/auth/signout/");
+        const res = await fetch(
+          "https://real-estate-server-yqaq.onrender.com/api/auth/signout/"
+        );
         const data = await res.json();
         if (data.success === false) {
           dispatch(signOutUserFailure(data.message));
           return;
         }
         dispatch(signOutUserSuccess(data));
+         clearPersistedState();
+        // navigate("/");
       } catch (error) {
         dispatch(signOutUserFailure(error.message));
       }
@@ -137,7 +149,14 @@ export default function Profile() {
     setShowListingsError(false);
     if (!listingsVisible) {
       try {
-        const res = await fetch(`https://real-estate-server-yqaq.onrender.com/api/user/listings/${currentUser._id}`);
+        const res = await fetch(
+          `https://real-estate-server-yqaq.onrender.com/api/user/listings/${currentUser._id}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
         const data = await res.json();
         if (data.success == false) {
           setShowListingsError(true);

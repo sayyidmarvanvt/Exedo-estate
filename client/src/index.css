@@ -5,3 +5,16 @@
 body {
   background-color: rgb(241, 245, 241);
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: rgb(241, 245, 241);
+}
+
+.swiper-pagination-bullet {
+  background-color: rgb(241, 245, 241);
+}
+
+.swiper-pagination-bullet-active {
+  background-color:rgb(241, 245, 241); 
+}

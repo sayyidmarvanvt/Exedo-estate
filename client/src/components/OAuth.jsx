@@ -25,7 +25,6 @@ export default function OAuth() {
         }),
       });
       const data = await res.json();
-      console.log("google", data);
       dispatch(signInSuccess(data));
       dispatch(signUpSuccess(data));
       navigate("/");

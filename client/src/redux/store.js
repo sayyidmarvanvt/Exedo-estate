@@ -23,6 +23,6 @@ export const store = configureStore({
 
 export const persistor=persistStore(store)
 
-window.onload = () => {
-    store.dispatch({ type: "user/clearError" });
+export const clearPersistedState = () => {
+    persistor.purge();
   };
