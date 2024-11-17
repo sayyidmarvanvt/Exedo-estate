@@ -27,7 +27,6 @@ import axios from "axios"; // Import axios
 export default function Profile() {
   const navigate = useNavigate();
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  console.log(currentUser);
 
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined); //for image

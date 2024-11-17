@@ -68,7 +68,6 @@ export const contactUser = async (req, res, next) => {
     }
     const { password:pass, ...rest } = user._doc;
     res.status(200).json(rest);
-    console.log(rest);
   } catch (error) {
     next(error);
   }
