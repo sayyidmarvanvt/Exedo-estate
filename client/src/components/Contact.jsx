@@ -14,7 +14,8 @@ export default function Contact({ listing }) {
     const fetchLandlord = async () => {
       try {
         const res = await axios.get(
-          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`
+          `https://real-estate-server-yqaq.onrender.com/api/user/contact/${listing.userRef}`,
+          { withCredentials: true }
         );
         const data = res.data;
         setLandlord(data);
@@ -24,7 +25,7 @@ export default function Contact({ listing }) {
     };
     fetchLandlord();
   }, [listing]);
-  console.log(landlord);
+
   return (
     <>
       {landlord && (
