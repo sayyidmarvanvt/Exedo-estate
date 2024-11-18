@@ -3,7 +3,6 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
-const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -28,7 +27,6 @@ export const signup = async (req, res, next) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        expires: expiryDate,
         sameSite: "None",
         secure: process.env.NODE_ENV === "production",
       })
@@ -52,7 +50,6 @@ export const signin = async (req, res, next) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        expires: expiryDate,
         sameSite: "None",
         secure: process.env.NODE_ENV === "production",
       })
@@ -72,7 +69,6 @@ export const google = async (req, res, next) => {
       res
         .cookie("access_token", token, {
           httpOnly: true,
-          expires: expiryDate,
           sameSite: "None",
           secure: process.env.NODE_ENV === "production",
         })
@@ -95,7 +91,6 @@ export const google = async (req, res, next) => {
       res
         .cookie("access_token", token, {
           httpOnly: true,
-          expires: expiryDate,
           sameSite: "None",
           secure: process.env.NODE_ENV === "production",
         })
@@ -114,7 +109,6 @@ export const signout = async (req, res, next) => {
     path: "/",
     sameSite: "None",
     secure: process.env.NODE_ENV === "production",
-    expires: new Date(0),
   });
     res.status(200).json("User has been logged out!");
   } catch (error) {
