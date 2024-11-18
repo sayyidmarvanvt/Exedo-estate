@@ -115,6 +115,7 @@ export default function Profile() {
           dispatch(deleteUserFailure(data.message));
           return;
         }
+        clearPersistedState();
         dispatch(deleteUserSuccess(data));
         navigate("/");
       } catch (error) {
@@ -130,6 +131,7 @@ export default function Profile() {
         dispatch(signOutUserStart());
         const res = await axios.post(
           "https://real-estate-server-yqaq.onrender.com/api/auth/signout/",
+          {},
           { withCredentials: true } // Include credentials (cookies)
         );
         const data = res.data;
@@ -137,6 +139,7 @@ export default function Profile() {
           dispatch(signOutUserFailure(data.message));
           return;
         }
+        clearPersistedState();
         dispatch(signOutUserSuccess(data));
         navigate("/");
       } catch (error) {
