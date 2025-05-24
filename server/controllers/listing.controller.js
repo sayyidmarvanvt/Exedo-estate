@@ -10,6 +10,7 @@ export const createListing = async (req, res, next) => {
   }
 };
 
+
 export const deleteListing = async (req, res, next) => {
   const listing = await Listing.findById(req.params.id);
   if (!listing) {
@@ -55,6 +56,15 @@ export const getListing = async (req, res, next) => {
     next(error);
   }
 };
+export const getAllListings = async (req, res, next) => {
+  try {
+    const listings = await Listing.find(); 
+    res.status(200).json(listings);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const searchListings = async (req, res, next) => {
   try {
