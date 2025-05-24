@@ -1,86 +1,75 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import ListingItem from "../components/ListingItem";
-import Spinner from "../components/spinner.component";
-import axios from "axios";
+import Hero from "../components/Hero";
+import PopularProperties from "../components/PopularProperties";
+import Services from "../components/Services";
+import About from "../components/About";
+import Team from "../components/Team";
+import Testimonials from "../components/Testimonials";
+import Blog from "../components/Blog";
+import Cta from "../components/Cta";
+
 
 export default function Home() {
-  const [offerListings, setOfferListings] = useState([]);
-  const [saleListings, setSaleListings] = useState([]);
-  const [rentListings, setRentListings] = useState([]);
-  const [loading, setLoading] = useState({
-    offers: true,
-    rent: true,
-    sale: true,
-  });
+  // const [offerListings, setOfferListings] = useState([]);
+  // const [saleListings, setSaleListings] = useState([]);
+  // const [rentListings, setRentListings] = useState([]);
+  // const [loading, setLoading] = useState({
+  //   offers: true,
+  //   rent: true,
+  //   sale: true,
+  // });
 
-  SwiperCore.use([Navigation]);
+  // SwiperCore.use([Navigation]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading({ offers: true, rent: true, sale: true });
-        const [offers, rent, sale] = await Promise.all([
-          axios
-            .get(
-              "https://real-estate-server-yqaq.onrender.com/api/listing/search?offer=true&limit=4"
-            )
-            .then((res) => res.data),
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading({ offers: true, rent: true, sale: true });
+  //       const [offers, rent, sale] = await Promise.all([
+  //         axios
+  //           .get(
+  //             "https://real-estate-server-yqaq.onrender.com/api/listing/search?offer=true&limit=4"
+  //           )
+  //           .then((res) => res.data),
 
-          axios
-            .get(
-              "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4"
-            )
-            .then((res) => res.data),
+  //         axios
+  //           .get(
+  //             "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=rent&limit=4"
+  //           )
+  //           .then((res) => res.data),
 
-          axios
-            .get(
-              "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4"
-            )
-            .then((res) => res.data),
-        ]);
-        setOfferListings(offers);
-        setRentListings(rent);
-        setSaleListings(sale);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading({ offers: false, rent: false, sale: false });
-      }
-    };
+  //         axios
+  //           .get(
+  //             "https://real-estate-server-yqaq.onrender.com/api/listing/search?type=sale&limit=4"
+  //           )
+  //           .then((res) => res.data),
+  //       ]);
+  //       setOfferListings(offers);
+  //       setRentListings(rent);
+  //       setSaleListings(sale);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setLoading({ offers: false, rent: false, sale: false });
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
-    <div>
-      <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">perfect</span>
-          <br />
-          place with ease
-        </h1>
-        <div className="text-gray-400 text-xs sm:text-sm">
-          <p>
-            Exedo Estate will help you find your home fast, easy, and
-            comfortable.
-            <br />
-            Our expert support is always available.
-          </p>
-        </div>
-        <Link
-          className="text-xs sm:text-sm text-blue-800 font-bold hover:underline"
-          to={"/search"}
-        >
-          Let's get started...
-        </Link>
-      </div>
-
-      {loading.offers ? (
+    <>
+      
+        <Hero />
+        <PopularProperties />
+        <Services />
+        <About />
+        <Team />
+        <Testimonials />
+        <Blog />
+        <Cta />
+     
+      {/* {loading.offers ? (
         <Spinner />
       ) : (
         <div className=" max-w-6xl mx-auto">
@@ -176,6 +165,7 @@ export default function Home() {
           )
         )}
       </div>
-    </div>
+       */}
+    </>
   );
 }

@@ -6,5 +6,3 @@ export default function PrivateRoute() {
 
   return currentUser ? <Outlet/>:<Navigate to='/sign-in'/>
 }
-
-//if user is available shown profile otherwise rediect to signin

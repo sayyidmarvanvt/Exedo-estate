@@ -1,5 +1,3 @@
-import React from "react";
-
 const Product = ({ data, handleClick }) => {
   return (
     <div className="flex flex-wrap justify-center gap-5 mt-16 ">

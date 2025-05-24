@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 import axios from "axios";
@@ -108,7 +108,7 @@ export default function Search() {
       setLoading(false);
     };
     fetchListings();
-  }, [window.location.search]);
+  }, []);
 
   const onShowMoreClick = async () => {
     const numberOfListings = listings.length;
@@ -127,7 +127,7 @@ export default function Search() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row m-5 sm:mt-10">
       <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <div className="flex gap-2 items-center">

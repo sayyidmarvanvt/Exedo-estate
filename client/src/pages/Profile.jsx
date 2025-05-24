@@ -50,6 +50,7 @@ export default function Profile() {
     }
   }, [file]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -62,7 +63,7 @@ export default function Profile() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
-      (error) => {
+      () => {
         setFileUploadError("Error uploading image. Make sure it's under 2 MB.");
       },
       () => {
@@ -170,7 +171,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="p-3 max-w-lg mx-auto m-5 sm:mt-10 section">
       <h1 className="text-3xl  font-semibold text-center my-7 uppercase">
         Profile
       </h1>
